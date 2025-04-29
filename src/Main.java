@@ -87,8 +87,22 @@ public class Main {
 	}
 	public static void createItem(Scanner scnr) {
 		item item = new item();
-		setItemName(item);
-		set
+		
+		System.out.println("Please enter an item name:");
+		String itemName = scnr.nextLine();
+		setItemName(itemName);
+		
+		System.out.println("Specify an item type:");
+		String itemType = scnr.nextLine();
+		setItemType(itemType);
+		
+		System.out.println("Set an item price:");
+		double itemPrice = scnr.nextDouble();
+		
+		System.out.println("Quantity of item:");
+		int itemQuantity = scnr.nextInt();
+		
+		
 		addNewItemToArray();
 		displayMenu(scnr);
 	}

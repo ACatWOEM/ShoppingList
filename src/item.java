@@ -7,19 +7,15 @@ public class item {
 	private double itemTotal = 0.00;
 
 	public void setItemName(String itemName) {//setter for itemName
-		System.out.println("Please enter an item name:");
 		this.itemName = itemName;
 	}
 	public void setItemType(String itemType) {//setter for itemType
-		System.out.println("Specify an item type:");
 		this.itemType = itemType;
 	}
 	public void setItemPrice(double itemPrice) {//setter for itemPrice
-		System.out.println("Set an item price:");
 		this.itemPrice = itemPrice;
 	}
 	public void setItemQuantity(int itemQuantity) {
-		System.out.println("Quantity of item:");
 		this.itemQuantity = itemQuantity;
 	}
 	public String getItemName() {//getter for itemName
