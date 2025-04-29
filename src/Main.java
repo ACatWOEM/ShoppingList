@@ -2,6 +2,7 @@ import java.util.Scanner;
 public class Main {
 	public static void displayMenu(Scanner scnr) {
 		System.out.println("-MENU-");
+		System.out.println("A - add Item");
 		System.out.println("B - set Budget");
 		System.out.println("D - Display List and remaining budget");
 		System.out.println("O - Organization options");
@@ -17,8 +18,10 @@ public class Main {
 		do {
 			input = scnr.nextLine();
 			choice = input.charAt(0);
-			
-			if(choice.equals('b') || choice.equals('B')) {
+			if(choice.equals('a') || choice.equals('A')) {
+				createItem(scnr);
+			}
+			else if(choice.equals('b') || choice.equals('B')) {
 				setBudget(scnr);
 			}
 			else if(choice.equals('d') || choice.equals('D')) {
@@ -83,7 +86,9 @@ public class Main {
 		displayMenu(scnr);
 	}
 	public static void createItem(Scanner scnr) {
-		
+		item item = new item();
+		setItemName(item);
+		set
 		addNewItemToArray();
 		displayMenu(scnr);
 	}
