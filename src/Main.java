@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 public class Main {
 	public static void displayMenu(Scanner scnr) {
 		System.out.println("-MENU-");
@@ -45,7 +46,6 @@ public class Main {
 		displayMenu(scnr);
 	}
 	public static void displayList(Scanner scnr) {
-		
 		displayMenu(scnr);
 	}
 	public static void organizationOptions(Scanner scnr) {
@@ -86,28 +86,30 @@ public class Main {
 		displayMenu(scnr);
 	}
 	public static void createItem(Scanner scnr) {
-		item item = new item();
+		item newItem = new item();
 		
 		System.out.println("Please enter an item name:");
 		String itemName = scnr.nextLine();
-		setItemName(itemName);
+		newItem.setItemName(itemName);
 		
 		System.out.println("Specify an item type:");
 		String itemType = scnr.nextLine();
-		setItemType(itemType);
+		newItem.setItemType(itemType);
 		
 		System.out.println("Set an item price:");
 		double itemPrice = scnr.nextDouble();
+		newItem.setItemPrice(itemPrice);
 		
 		System.out.println("Quantity of item:");
 		int itemQuantity = scnr.nextInt();
+		newItem.setItemQuantity(itemQuantity);
 		
-		
-		addNewItemToArray();
-		displayMenu(scnr);
+		addToArrayList(newItem);
+		main(null);
 	}
-	public static void addNewItemToArray () {
-		
+	public static void addToArrayList(item newItem) {
+		ArrayList<item> arrayOfItems = new ArrayList<item>();
+		arrayOfItems.add(newItem);
 	}
 	
 	public static void main(String[] args) {
