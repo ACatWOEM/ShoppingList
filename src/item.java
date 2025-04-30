@@ -1,3 +1,4 @@
+// TODO READ ABOUT import java.math.BigDecimal;
 
 public class item {
 	private String itemName = "no name";
@@ -35,6 +36,11 @@ public class item {
 		return itemTotal;
 	}
 	public void printItemInfo() {//getter for printing the information about an item
-		System.out.println(getItemQuantity() + " " + getItemName() + "'s @ $" + getItemPrice() + "is $" + getItemTotal() + " total");
+		if(getItemQuantity() == 1) {
+			System.out.println(getItemQuantity() + " " + getItemName() + " @ $" + getItemPrice() + " is $" +  getItemTotal());
+		}
+		else {
+			System.out.println(getItemQuantity() + " " + getItemName() + "'s @ $" + getItemPrice() + " is $" +  getItemTotal());
+		}
 	}
 }
