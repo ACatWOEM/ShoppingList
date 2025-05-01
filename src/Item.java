@@ -1,6 +1,6 @@
 // TODO READ ABOUT import java.math.BigDecimal;
 
-public class item {
+public class Item {
 	private String itemName = "no name";
 	private String itemType = "no type";
 	private double itemPrice = 0.00;
