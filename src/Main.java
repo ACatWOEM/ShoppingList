@@ -7,8 +7,8 @@ public class Main {
 	static ArrayList<Item> itemList = new ArrayList<Item>();
 	
 	public static void printMainMenu() {
-		System.out.println("-MENU-");
-		System.out.println("A - add Item");// in the future open "manage items" options to add item, remove item, search items, etc.
+		System.out.println("-MAIN MENU-");
+		System.out.println("M - Manage items");
 		System.out.println("B - set Budget");
 		System.out.println("D - Display List and remaining budget");
 		System.out.println("O - Organization options");
@@ -20,16 +20,17 @@ public class Main {
 		System.out.println("-ORGANIZATION OPTIONS-");
 		System.out.println("P - Organize by price");
 		System.out.println("G - Organize by group");
-		System.out.println("R - Return to menu");
+		System.out.println("Q - Return to main menu");
 		System.out.println("Please choose an option: ");
 	}
-	public static void manageItemsMenu() {
+	public static void printManageItemsMenu() {
+		System.out.println("-MANAGE ITEMS-");
+		System.out.println("A - Add item");
+		System.out.println("R - Remove item");
+		System.out.println("S - Search item");
+		System.out.println("Q - Return to main menu");
+		System.out.println("Please choose an option: ");
 		
-	}
-	public static void setBudget(Scanner scnr) {
-		//TODO create a budget class in order to create different budget objects
-		
-		return;
 	}
 	public static void organizationOptionsMenu(Scanner scnr) {
 		String input;//initialize String variable input
@@ -43,10 +44,42 @@ public class Main {
 			else if(input.equalsIgnoreCase("g")) {//else if branch for if input is g or G
 				organizeByGroup(scnr);//call organizeByGroup and pass the scanner
 			}
+			else if(input.equalsIgnoreCase("q")) {
+				System.out.println();
+			}
 			else{//else alert user of invalid input
 				System.out.println("!INVALID INPUT!");//println
 			}
-		}while(!input.equalsIgnoreCase("r"));//do while input is not r or R
+		}while(!input.equalsIgnoreCase("q"));//do while input is not r or R
+		return;
+	}
+	public static void manageItemsMenu(Scanner scnr) {
+		String input;
+		
+		do {
+			printManageItemsMenu();
+			input = scnr.nextLine();
+			if(input.equalsIgnoreCase("a")) {
+				createItem(scnr);
+			}
+			else if(input.equalsIgnoreCase("r")) {
+				removeItem(scnr);
+			}
+			else if(input.equalsIgnoreCase("s")) {
+				searchItem(scnr);
+			}
+			else if(input.equalsIgnoreCase("q")) {
+				System.out.println();
+			}
+			else {
+				System.out.println("!INVALID INPUT!");
+			}
+		}while(!input.equalsIgnoreCase("q"));
+		
+	}
+	public static void setBudget(Scanner scnr) {
+		//TODO create a budget class in order to create different budget objects
+		
 		return;
 	}
 	public static void organizeByPrice(Scanner scnr) {
@@ -93,7 +126,7 @@ public class Main {
 		}
 		catch(InputMismatchException e) {//if input is not acceptable, catch exception
 			System.out.println("!PLEASE USE NUMBERS TO INPUT THE ITEM PRICE!");//alert user
-			scnr.next();//clear the scanner
+			scnr.nextLine();//clear the scanner
 		}
 		}while(!isValidInput);//do this while isValidInput is false
 		//do while with exceptions to assign itemQuantity
@@ -106,7 +139,7 @@ public class Main {
 		}
 		catch(InputMismatchException e) {//if input is not acceptable, catch exception
 			System.out.println("!PLEASE USE WHOLE NUMBERS TO INPUT ITEM QUANTITY!");//alert user
-			scnr.next();//clear the scanner
+			scnr.nextLine();//clear the scanner
 		}
 		}while(!isValidInput);//do this while isValidInput is false
 		itemList.add(newItem);//add object newItem to ArrayList itemList
@@ -116,6 +149,48 @@ public class Main {
 		
 		scnr.nextLine();//clear the scanner
 		return;
+	}
+	public static void removeItem(Scanner scnr) {
+		String choice = "";
+		Item tempItem;
+		System.out.println("-ITEMS ON LIST-");
+		displayItemNames();
+		System.out.println("Please select an item from list for removal");
+		choice = scnr.nextLine();
+		for(int i = 0 ; i < itemList.size(); ++i) {
+			tempItem = itemList.get(i);
+			if(choice.equalsIgnoreCase(tempItem.getItemName())) {
+				System.out.println(tempItem.getItemName() + " removed");
+				itemList.remove(i);
+			}
+		}
+	}
+	public static void searchItem(Scanner scnr) {
+		String choice = "";
+		Item tempItem;
+		System.out.println("-ITEMS ON LIST-");
+		displayItemNames();
+		System.out.println("Please select which item you wish to see information about: ");
+		choice = scnr.nextLine();
+		for(int i = 0 ; i < itemList.size(); ++i) {
+			tempItem = itemList.get(i);
+			if(choice.equalsIgnoreCase(tempItem.getItemName())) {
+			tempItem.printItemInfo();
+			}
+		}	
+	}
+	public static void displayItemNames() {
+		Item tempItem;
+		for(int i = 0 ; i < itemList.size(); ++i) {
+			tempItem = itemList.get(i);
+			if(i < itemList.size() - 1) {
+				System.out.print(tempItem.getItemName() + ", ");
+			}
+			else if(i == itemList.size() - 1) {
+				System.out.print(tempItem.getItemName());
+			}
+		}
+		System.out.println();
 	}
 	public static void printArrayList(Scanner scnr) {
 		int count = 0;//count will be used to display total items on shopping list
@@ -133,7 +208,8 @@ public class Main {
 		else {//else branch in case there are no items on the list
 			System.out.println("No items on list");//println
 		}
-		System.out.println("Total: " + calculateTotal());//println calls the calculate total method, to display total
+		System.out.print("Total: $");//text
+		System.out.printf("%.2f\n", calculateTotal());//printf calls the calculate total method, and formats it
 		return;
 	}
 	
@@ -143,8 +219,8 @@ public class Main {
 		do{//do while loop starts, branches will allow lowercase and uppercase
 			printMainMenu();//always start by printing the main menu
 			input = scnr.nextLine();//input is the nextLine
-			if(input.equalsIgnoreCase("a")) {//if branch with ignorecase for option a
-				createItem(scnr);//call createItem and pass the scnr
+			if(input.equalsIgnoreCase("m")) {//if branch with ignorecase for option m
+				manageItemsMenu(scnr);//call manageItemsMenu and pass the scnr
 			}
 			else if(input.equalsIgnoreCase("b")) {//else if branch with ignorecase for option b
 				setBudget(scnr);//call setBudget and pass the scnr

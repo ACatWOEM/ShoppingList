@@ -28,19 +28,25 @@ public class Item {
 	public double getItemPrice() {//getter for itemPrice
 		return itemPrice;
 	}
-	public int getItemQuantity() {
+	public int getItemQuantity() {//getter for itemQuantity
 		return itemQuantity;
 	}
-	public double getItemTotal() {
+	public double getItemTotal() {//getter price and quantity, calculate total
 		itemTotal = itemPrice * itemQuantity;
 		return itemTotal;
 	}
 	public void printItemInfo() {//getter for printing the information about an item
 		if(getItemQuantity() == 1) {
-			System.out.println(getItemQuantity() + " " + getItemName() + " @ $" + getItemPrice() + " is $" +  getItemTotal());
+			System.out.print(getItemQuantity() + " " + getItemName() + " @ $"); //one name at a price
+			System.out.printf("%.2f", getItemPrice());//formatting for hundredth decimal always
+			System.out.print(" is $");//is total
+			System.out.printf("%.2f\n", getItemTotal());//formatting for hundredth decimal always
 		}
 		else {
-			System.out.println(getItemQuantity() + " " + getItemName() + "'s @ $" + getItemPrice() + " is $" +  getItemTotal());
+			System.out.print(getItemQuantity() + " " + getItemName() + "'s @ $"); //quantity name's at a price
+			System.out.printf("%.2f", getItemPrice());//formatting for hundredth decimal always
+			System.out.print(" is $");//is total
+			System.out.printf("%.2f\n", getItemTotal());//formatting for hundredth decimal always
 		}
 	}
 }
