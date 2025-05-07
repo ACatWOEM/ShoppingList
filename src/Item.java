@@ -16,7 +16,7 @@ public class Item {
 	public void setItemPrice(double itemPrice) {//setter for itemPrice
 		this.itemPrice = itemPrice;
 	}
-	public void setItemQuantity(int itemQuantity) {
+	public void setItemQuantity(int itemQuantity) {//setter for itemQuantity
 		this.itemQuantity = itemQuantity;
 	}
 	public String getItemName() {//getter for itemName
