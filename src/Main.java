@@ -2,13 +2,11 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 public class Main {
-	
-	static Scanner scnr = new Scanner(System.in);
-	static ArrayList<Item> itemList = new ArrayList<Item>();
-	
-	public static void printMainMenu() {
+	static Scanner scnr = new Scanner(System.in);//initialize the scanner
+	static ArrayList<Item> itemList = new ArrayList<Item>();//initialize a static array list named ItemList for storing new Item objects
+	public static void printMainMenu() {//method for printing the main menu options
 		System.out.println("-MAIN MENU-");
-		System.out.println("M - Manage items");
+		System.out.println("I - Manage items");
 		System.out.println("B - set Budget");
 		System.out.println("D - Display List and remaining budget");
 		System.out.println("O - Organization options");
@@ -16,14 +14,14 @@ public class Main {
 		System.out.println("Q - Quit");
 		System.out.println("Please choose an option: ");
 	}
-	public static void printOrganizationOptionsMenu() {
+	public static void printOrganizationOptionsMenu() {//method for printing the organization options menu
 		System.out.println("-ORGANIZATION OPTIONS-");
 		System.out.println("P - Organize by price");
 		System.out.println("G - Organize by group");
 		System.out.println("Q - Return to main menu");
 		System.out.println("Please choose an option: ");
 	}
-	public static void printManageItemsMenu() {
+	public static void printManageItemsMenu() {//method for printing the manage items menu
 		System.out.println("-MANAGE ITEMS-");
 		System.out.println("A - Add item");
 		System.out.println("R - Remove item");
@@ -32,7 +30,7 @@ public class Main {
 		System.out.println("Please choose an option: ");
 		
 	}
-	public static void organizationOptionsMenu(Scanner scnr) {
+	public static void organizationOptionsMenu(Scanner scnr) {//method for navigating the organization options menu
 		String input;//initialize String variable input
 		
 		do{//start do while loop, will allow for uppercase and lowercase input
@@ -53,7 +51,7 @@ public class Main {
 		}while(!input.equalsIgnoreCase("q"));//do while input is not r or R
 		return;
 	}
-	public static void manageItemsMenu(Scanner scnr) {
+	public static void manageItemsMenu(Scanner scnr) {//method for navigating the manage items menu
 		String input;
 		
 		do {
@@ -92,14 +90,14 @@ public class Main {
 	}
 	public static void organizeByGroup(Scanner scnr) {
 		/*
-		 *a nested for loop will iterate through ArrayList multiple times to find matching itemTypes, each time it finds a matching itemType that index will be added to a new ArrayList
+		 *TODO a nested for loop will iterate through ArrayList multiple times to find matching itemTypes, each time it finds a matching itemType that index will be added to a new ArrayList
 		 *old ArrayList will be scanned again and again until the new arrayList matches the size of the old ArrayList, this method will return the new ArrayList, replacing the old one.
 		 *NOTE: it might be helpful to make an ArrayList for already encountered itemTypes so that way we can ignore already sorted itemTypes
 		 */
 		
 		return;
 	}
-	public static double calculateTotal() {
+	public static double calculateTotal() {//method for calculating the total of the entire shopping list
 		double total = 0.00;//initialize total with 0.00
 		for(int i = 0 ; i < itemList.size(); ++i) {//for loop iterates through the size of itemList
 			Item tempItem = itemList.get(i);//assign new object tempItem with object at i index of itemList
@@ -107,7 +105,7 @@ public class Main {
 		}
 		return total;//return the double total
 	}
-	public static void createItem(Scanner scnr) {
+	public static void createItem(Scanner scnr) {//method for creating new Item objects and putting them in the itemList ArrayList
 		Item newItem = new Item();//create the new item
 		boolean isValidInput;//boolean variable for handling exceptions later on
 		//assign itemPrice
@@ -150,7 +148,7 @@ public class Main {
 		scnr.nextLine();//clear the scanner
 		return;
 	}
-	public static void removeItem(Scanner scnr) {
+	public static void removeItem(Scanner scnr) {//method for removing an item from the shopping list
 		String choice = "";
 		Item tempItem;
 		System.out.println("-ITEMS ON LIST-");
@@ -165,7 +163,7 @@ public class Main {
 			}
 		}
 	}
-	public static void searchItem(Scanner scnr) {
+	public static void searchItem(Scanner scnr) {//method for displaying information about a specific item on shopping list
 		String choice = "";
 		Item tempItem;
 		System.out.println("-ITEMS ON LIST-");
@@ -179,7 +177,7 @@ public class Main {
 			}
 		}	
 	}
-	public static void displayItemNames() {
+	public static void displayItemNames() {//method for displaying item names to help user choose from a list of item names
 		Item tempItem;
 		for(int i = 0 ; i < itemList.size(); ++i) {
 			tempItem = itemList.get(i);
@@ -192,7 +190,7 @@ public class Main {
 		}
 		System.out.println();
 	}
-	public static void printArrayList(Scanner scnr) {
+	public static void printArrayList(Scanner scnr) {//displaying the shopping list
 		int count = 0;//count will be used to display total items on shopping list
 		for(int i = 0 ; i < itemList.size(); i++) {//for loop iterates through the size of itemList
 			Item tempItem = itemList.get(i);//assign new tempItem with the object at the i index of itemList ArrayList
@@ -212,14 +210,13 @@ public class Main {
 		System.out.printf("%.2f\n", calculateTotal());//printf calls the calculate total method, and formats it
 		return;
 	}
-	
-	public static void main(String[] args) {
+	public static void main(String[] args) {//main executes the main menu for the most part
 		String input;//initialize String variable input
 		
 		do{//do while loop starts, branches will allow lowercase and uppercase
 			printMainMenu();//always start by printing the main menu
 			input = scnr.nextLine();//input is the nextLine
-			if(input.equalsIgnoreCase("m")) {//if branch with ignorecase for option m
+			if(input.equalsIgnoreCase("i")) {//if branch with ignorecase for option m
 				manageItemsMenu(scnr);//call manageItemsMenu and pass the scnr
 			}
 			else if(input.equalsIgnoreCase("b")) {//else if branch with ignorecase for option b
