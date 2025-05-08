@@ -2,6 +2,7 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 public class Main {
@@ -190,13 +191,29 @@ public class Main {
 		}	
 	}
 	public static void clearList() {
-		if(itemList.size() > 0) {
-			itemList.clear();
-			System.out.println("List cleared");
-		}
-		else {
-			System.out.println("List is empty");
-		}
+		String choice = "";
+		do {
+			System.out.println("ARE YOU SURE YOU WANT TO CLEAR YOUR SHOPPING LIST?");
+			System.out.println("Y - YES || N - NO");
+			choice = scnr.nextLine();
+			if(choice.equalsIgnoreCase("y")) {
+				if(itemList.size() > 0) {
+					itemList.clear();
+					System.out.println("List cleared");
+					return;
+				}
+				else {
+					System.out.println("List is empty");
+					return;
+				}
+			}
+			else if(choice.equalsIgnoreCase("n")) {
+				return;
+			}
+			else {
+				System.out.println("!PLEASE ENTER A VALID INPUT!");
+			}
+		}while(!choice.equalsIgnoreCase("y") || !choice.equalsIgnoreCase("n"));
 	}
 	public static void displayItemNames() {//method for displaying item names to help user choose from a list of item names
 		Item tempItem;
@@ -246,7 +263,7 @@ public class Main {
 	}
 	public static void saveList(File file, Scanner fileScan)throws IOException {
 		String fileContent="";
-		FileWriter writer = new FileWriter("C:/Users/Richard/Desktop/EclipseWorkspace/ShoppingList/src/ShoppingList.txt");
+		FileWriter writer = new FileWriter("src/ShoppingList.txt");
 		fileContent = fileContent.concat(scanItemList());
 		writer.write(fileContent);
 		writer.close();
@@ -264,37 +281,44 @@ public class Main {
 		return buildList;
 	}
 	public static void main(String[] args) throws IOException {//main executes the main menu for the most part
-		File file = new File("C:/Users/Richard/Desktop/EclipseWorkspace/ShoppingList/src/ShoppingList.txt");
-		Scanner fileScan = new Scanner(file);
-		String input;//initialize String variable input
-		openList(fileScan);
-		do{//do while loop starts, branches will allow lowercase and uppercase
-			printMainMenu();//always start by printing the main menu
-			input = scnr.nextLine();//input is the nextLine
-			if(input.equalsIgnoreCase("i")) {//if branch with ignorecase for option m
-				manageItemsMenu(scnr);//call manageItemsMenu and pass the scnr
-			}
-			else if(input.equalsIgnoreCase("b")) {//else if branch with ignorecase for option b
-				setBudget(scnr);//call setBudget and pass the scnr
-			}
-			else if(input.equalsIgnoreCase("d")) {//else if branch with ignorecase for option d
-				printArrayList(scnr);//call printArrayList and pass the scnr
-			}
-			else if(input.equalsIgnoreCase("o")) {//else if branch with ignorecase for option o
-				organizationOptionsMenu(scnr);//call organizationOptions and pass the scnr
-			}
-			else if(input.equalsIgnoreCase("t")) {//else if branch with ignorecase for option t
-				calculateTotal();//call calculateTotal and pass the scnr
-			}
-			else if(input.equalsIgnoreCase("q")) {//else if branch with ignorecase for option q
-				saveList(file, fileScan);
-				System.out.println("Quitting");//printline to let user no program is terminating
-			}
-			else {
-				System.out.println("!INVALID INPUT!");//else alert user of invalid input
-			}
-		}while(!input.equalsIgnoreCase("q"));//do this while input is not q
-		scnr.close();//close the scanner
-		fileScan.close();
+		try {//main will try all of it's main functions
+			File file = new File("src/ShoppingList.txt");
+			Scanner fileScan = new Scanner(file);
+			String input;//initialize String variable input
+			openList(fileScan);
+			do{//do while loop starts, branches will allow lowercase and uppercase
+				printMainMenu();//always start by printing the main menu
+				input = scnr.nextLine();//input is the nextLine
+				if(input.equalsIgnoreCase("i")) {//if branch with ignorecase for option m
+					manageItemsMenu(scnr);//call manageItemsMenu and pass the scnr
+				}
+				else if(input.equalsIgnoreCase("b")) {//else if branch with ignorecase for option b
+					setBudget(scnr);//call setBudget and pass the scnr
+				}
+				else if(input.equalsIgnoreCase("d")) {//else if branch with ignorecase for option d
+					printArrayList(scnr);//call printArrayList and pass the scnr
+				}
+				else if(input.equalsIgnoreCase("o")) {//else if branch with ignorecase for option o
+					organizationOptionsMenu(scnr);//call organizationOptions and pass the scnr
+				}
+				else if(input.equalsIgnoreCase("t")) {//else if branch with ignorecase for option t
+					calculateTotal();//call calculateTotal and pass the scnr
+				}
+				else if(input.equalsIgnoreCase("q")) {//else if branch with ignorecase for option q
+					saveList(file, fileScan);
+					System.out.println("Quitting");//printline to let user no program is terminating
+				}
+				else {
+					System.out.println("!INVALID INPUT!");//else alert user of invalid input
+				}
+			}while(!input.equalsIgnoreCase("q"));//do this while input is not q
+			scnr.close();//close the scanner
+			fileScan.close();
+		}
+		catch(FileNotFoundException e) {//if there is no shoppingList.txt file, main will catch this exception and create shoppinglist.exe, and return to main with a null argument
+			FileWriter writer = new FileWriter("src/ShoppingList.txt");
+			writer.close();
+			main(null);
+		}
 	}
 }
