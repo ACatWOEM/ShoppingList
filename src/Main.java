@@ -14,13 +14,13 @@ public class Main {
 		System.out.println("B - set Budget");
 		System.out.println("D - Display List and remaining budget");
 		System.out.println("O - Organization options");
-		System.out.println("T - Calculate total + tax");
 		System.out.println("Q - Quit");
 		System.out.println("Please choose an option: ");
 	}
 	public static void printOrganizationOptionsMenu() {//method for printing the organization options menu
 		System.out.println("-ORGANIZATION OPTIONS-");
-		System.out.println("P - Organize by price");
+		System.out.println("A - Organize by price(Ascending)");
+		System.out.println("D - Organize by price(Descending)");
 		System.out.println("G - Organize by group");
 		System.out.println("Q - Return to main menu");
 		System.out.println("Please choose an option: ");
@@ -41,11 +41,20 @@ public class Main {
 		do{//start do while loop, will allow for uppercase and lowercase input
 			printOrganizationOptionsMenu();//always display organizationsOptionsMenu first
 			input = scnr.nextLine();//input is assigned with scnr.nextLine();
-			if (input.equalsIgnoreCase("p")) {//if branch for if input is p or P
-				organizeByPrice(scnr);//call organizeByPrice and pass the scanner
+			if (input.equalsIgnoreCase("a")) {//if branch for if input is p or P
+				organizeByPriceAscending();;//call organizeByPrice and pass the scanner
+				printArrayList();
+				return;
+			}
+			else if(input.equalsIgnoreCase("d")) {
+				organizeByPriceDescending();
+				printArrayList();
+				return;
 			}
 			else if(input.equalsIgnoreCase("g")) {//else if branch for if input is g or G
-				organizeByGroup(scnr);//call organizeByGroup and pass the scanner
+				itemList = organizeByGroup();//call organizeByGroup and pass the scanner
+				printArrayList();
+				return;
 			}
 			else if(input.equalsIgnoreCase("q")) {
 				System.out.println();
@@ -88,22 +97,67 @@ public class Main {
 		
 		return;
 	}
-	public static void organizeByPrice(Scanner scnr) {
-		/*
-		 * TODO for loop with if else if branches for whether or not a price at index i is higher or lower than the the former index, deciding 
-		 * which way to push object in index (up or down)this might be a nested for loop to ensure that every price is properly sorted
-		 */
-	
+	public static void organizeByPriceAscending() {
+		for(int j = 0; j < itemList.size() - 1; ++j) {	
+			for(int i = 0; i < itemList.size() - 1; ++i) {
+				Item item1 = itemList.get(i);
+				if(i != itemList.size()) {
+					Item item2 = itemList.get(i+1);
+					if(item1.getItemPrice() > item2.getItemPrice()) {
+						itemList.set(i, item2);
+						itemList.set(i+1, item1);
+					}
+					else if(item1.getItemPrice() < item2.getItemPrice()) {
+						itemList.set(i, item1);
+						itemList.set(i+1, item2);					
+					}
+				}
+				else {
+				}
+			}
+		}
 		return;
 	}
-	public static void organizeByGroup(Scanner scnr) {
-		/*
-		 *TODO a nested for loop will iterate through ArrayList multiple times to find matching itemTypes, each time it finds a matching itemType that index will be added to a new ArrayList
-		 *old ArrayList will be scanned again and again until the new arrayList matches the size of the old ArrayList, this method will return the new ArrayList, replacing the old one.
-		 *NOTE: it might be helpful to make an ArrayList for already encountered itemTypes so that way we can ignore already sorted itemTypes
-		 */
-		
+	public static void organizeByPriceDescending() {
+		for(int j = 0; j < itemList.size() - 1; ++j) {	
+			for(int i = 0; i < itemList.size() - 1; ++i) {
+				Item item1 = itemList.get(i);
+				if(i != itemList.size()) {
+					Item item2 = itemList.get(i+1);
+					if(item1.getItemPrice() < item2.getItemPrice()) {
+						itemList.set(i, item2);
+						itemList.set(i+1, item1);
+					}
+					else if(item1.getItemPrice() > item2.getItemPrice()) {
+						itemList.set(i, item1);
+						itemList.set(i+1, item2);					
+					}
+				}
+				else {
+				}
+			}
+		}
 		return;
+	}
+	public static ArrayList<Item> organizeByGroup() {
+	    ArrayList<String> typeList = new ArrayList<String>();
+	    ArrayList<Item> sortedList = new ArrayList<Item>();
+	    for(int i =0 ; i < itemList.size(); ++i) {
+	    	Item tempItem = itemList.get(i);
+	        if(!typeList.contains(tempItem.getItemType())) {
+	            typeList.add(tempItem.getItemType());
+	        }
+	    }
+	    for(int i = 0; i < typeList.size(); ++i) {
+	    	String type = typeList.get(i);
+	        for(int j = 0; j < itemList.size(); ++j) {
+	        	Item tempItem = itemList.get(j);
+	            if(tempItem.getItemType().equals(type)) {
+	                sortedList.add(tempItem);
+	            }
+	        }
+	    }   
+	    return sortedList;
 	}
 	public static double calculateTotal() {//method for calculating the total of the entire shopping list
 		double total = 0.00;//initialize total with 0.00
@@ -228,7 +282,7 @@ public class Main {
 		}
 		System.out.println();
 	}
-	public static void printArrayList(Scanner scnr) {//displaying the shopping list
+	public static void printArrayList() {//displaying the shopping list
 		int count = 0;//count will be used to display total items on shopping list
 		for(int i = 0 ; i < itemList.size(); i++) {//for loop iterates through the size of itemList
 			Item tempItem = itemList.get(i);//assign new tempItem with the object at the i index of itemList ArrayList
@@ -296,13 +350,10 @@ public class Main {
 					setBudget(scnr);//call setBudget and pass the scnr
 				}
 				else if(input.equalsIgnoreCase("d")) {//else if branch with ignorecase for option d
-					printArrayList(scnr);//call printArrayList and pass the scnr
+					printArrayList();//call printArrayList and pass the scnr
 				}
 				else if(input.equalsIgnoreCase("o")) {//else if branch with ignorecase for option o
 					organizationOptionsMenu(scnr);//call organizationOptions and pass the scnr
-				}
-				else if(input.equalsIgnoreCase("t")) {//else if branch with ignorecase for option t
-					calculateTotal();//call calculateTotal and pass the scnr
 				}
 				else if(input.equalsIgnoreCase("q")) {//else if branch with ignorecase for option q
 					saveList(file, fileScan);

@@ -43,7 +43,7 @@ public class Item {
 			System.out.printf("%.2f\n", getItemTotal());//formatting for hundredth decimal always
 		}
 		else {
-			System.out.print(getItemQuantity() + " " + getItemName() + "'s @ $"); //quantity name's at a price
+			System.out.print(getItemQuantity() + " " + getItemName() + "'s @ $"); //quantity name's at a price		
 			System.out.printf("%.2f", getItemPrice());//formatting for hundredth decimal always
 			System.out.print(" is $");//is total
 			System.out.printf("%.2f\n", getItemTotal());//formatting for hundredth decimal always
