@@ -98,68 +98,50 @@ public class Main {
 		
 		return;
 	}
-	public static void organizeByPriceAscending() {
-		for(int j = 0; j < itemList.size() - 1; ++j) {	
-			for(int i = 0; i < itemList.size() - 1; ++i) {
-				Item item1 = itemList.get(i);
-				if(i != itemList.size()) {
-					Item item2 = itemList.get(i+1);
-					if(item1.getItemPrice() > item2.getItemPrice()) {
-						itemList.set(i, item2);
-						itemList.set(i+1, item1);
-					}
-					else if(item1.getItemPrice() < item2.getItemPrice()) {
-						itemList.set(i, item1);
-						itemList.set(i+1, item2);					
-					}
-				}
-				else {
-				}
-			}
-		}
-		return;
-	}
-	public static void organizeByPriceDescending() {
-		for(int j = 0; j < itemList.size() - 1; ++j) {	
-			for(int i = 0; i < itemList.size() - 1; ++i) {
-				Item item1 = itemList.get(i);
-				if(i != itemList.size()) {
-					Item item2 = itemList.get(i+1);
-					if(item1.getItemPrice() < item2.getItemPrice()) {
-						itemList.set(i, item2);
-						itemList.set(i+1, item1);
-					}
-					else if(item1.getItemPrice() > item2.getItemPrice()) {
-						itemList.set(i, item1);
-						itemList.set(i+1, item2);					
-					}
-				}
-				else {
-				}
-			}
-		}
-		return;
-	}
-	public static ArrayList<Item> organizeByGroup() {
-	    ArrayList<String> typeList = new ArrayList<String>();
-	    ArrayList<Item> sortedList = new ArrayList<Item>();
-	    for(int i =0 ; i < itemList.size(); ++i) {
-	    	Item tempItem = itemList.get(i);
-	        if(!typeList.contains(tempItem.getItemType())) {
-	            typeList.add(tempItem.getItemType());
-	        }
-	    }
-	    for(int i = 0; i < typeList.size(); ++i) {
-	    	String type = typeList.get(i);
-	        for(int j = 0; j < itemList.size(); ++j) {
-	        	Item tempItem = itemList.get(j);
-	            if(tempItem.getItemType().equals(type)) {
-	                sortedList.add(tempItem);
-	            }
-	        }
-	    }   
-	    return sortedList;
-	}
+	public static void organizeByPriceAscending() { // method sorts item from lowest to highest
+		for (int j = 0; j < itemList.size() - 1; ++j) {
+            for (int i = 0; i < itemList.size() - 1 - j; ++i) {
+                Item item1 = itemList.get(i);
+                Item item2 = itemList.get(i + 1);
+                if (item1.getItemPrice() > item2.getItemPrice()) {
+                    itemList.set(i, item2);
+                    itemList.set(i + 1, item1);
+                }
+            }
+        }
+    }
+	public static void organizeByPriceDescending() {// method sorts item from highest to lowest 
+		for (int j = 0; j < itemList.size() - 1; ++j) {
+            for (int i = 0; i < itemList.size() - 1 - j; ++i) {
+                Item item1 = itemList.get(i);
+                Item item2 = itemList.get(i + 1);
+                if (item1.getItemPrice() < item2.getItemPrice()) {
+                    itemList.set(i, item2);
+                    itemList.set(i + 1, item1);
+                }
+            }
+        }
+    }
+	public static ArrayList<Item> organizeByGroup() { // method groups item by item type
+        ArrayList<String> typeList = new ArrayList<>();
+        ArrayList<Item> sortedList = new ArrayList<>();
+
+        for (Item item : itemList) {
+            if (!typeList.contains(item.getItemType())) {
+                typeList.add(item.getItemType());
+            }
+        }
+
+        for (String type : typeList) {
+            for (Item item : itemList) {
+                if (item.getItemType().equals(type)) {
+                    sortedList.add(item);
+                }
+            }
+        }
+
+        return sortedList;
+    }
 	public static double calculateTotal() {//method for calculating the total of the entire shopping list
 		double total = 0.00;//initialize total with 0.00
 		for(int i = 0 ; i < itemList.size(); ++i) {//for loop iterates through the size of itemList
