@@ -1,6 +1,7 @@
 import java.util.Scanner;//import scanner
 import java.util.ArrayList;//import ArrayList
 import java.util.InputMismatchException;//import the catch for input mismatch exceptions
+import java.util.NoSuchElementException;
 import java.io.File;//import File for creating file objects
 import java.io.FileNotFoundException;//import the file not found exception for catching and creating new files
 import java.io.FileWriter;//import the fileWriter for writing to files
@@ -9,6 +10,7 @@ import java.io.IOException;//import the IO exception for catching IO errors
 public class Main {
 	static Scanner scnr = new Scanner(System.in);//initialize the scanner for system input
 	static ArrayList<Item> itemList = new ArrayList<Item>();//initialize a static array list named ItemList for storing new Item objects
+	static Budget budget = new Budget();
 	public static void printMainMenu() {//method for printing the main menu options
 		System.out.println("-MAIN MENU-");
 		System.out.println("I - Manage items");
@@ -34,11 +36,16 @@ public class Main {
 		System.out.println("C - Clear list");
 		System.out.println("Q - Return to main menu");
 		System.out.println("Please choose an option: ");
-		
+	}
+	public static void payFreqMenu() {//method for printing options within the setBudget method
+		System.out.println("-Pay Frequency-");
+		System.out.println("W - Weekly");
+		System.out.println("B - BiWeekly");
+		System.out.println("M - Monthly");
+		System.out.println("A - Annual");
 	}
 	public static void organizationOptionsMenu(Scanner scnr) {//method for navigating the organization options menu
 		String input;//initialize String variable input
-		
 		do{//start do while loop, will allow for uppercase and lowercase input
 			printOrganizationOptionsMenu();//always display organizationsOptionsMenu first
 			input = scnr.nextLine();//input is assigned with scnr.nextLine();
@@ -68,7 +75,6 @@ public class Main {
 	}
 	public static void manageItemsMenu(Scanner scnr) {//method for navigating the manage items menu
 		String input;
-		
 		do {
 			printManageItemsMenu();//display manage items menu
 			input = scnr.nextLine();//input is the scanners next line
@@ -91,11 +97,28 @@ public class Main {
 				System.out.println("!INVALID INPUT!");//warn user of invalid input
 			}
 		}while(!input.equalsIgnoreCase("q"));//do while input isn't q, ignoring case.
-		
 	}
 	public static void setBudget(Scanner scnr) {
-		//TODO create a budget class in order to create different budget objects
-		
+		System.out.println("Enter Income: ");
+		budget.setIncome(scnr);
+		payFreqMenu();
+		budget.setPayFrequency(scnr);
+		budget.setMonthlyPay();
+		System.out.print("Percentage of ");
+		System.out.printf("%.2f", budget.getMonthlyPay());
+		System.out.println(" for budget: ");
+		budget.setPercentage(scnr);
+		budget.calculateBudget();
+		System.out.print("Monthly budget set at: ");
+		System.out.printf("%.2f", budget.getBudget());
+		System.out.println();
+		scnr.nextLine();
+		return;
+	}
+	public static void remainingBudget() {
+		double remain = budget.getBudget() - calculateTotalPlusTax();
+		System.out.print("Remaining Budget: ");
+		System.out.printf("%.2f\n", remain);
 		return;
 	}
 	public static void organizeByPriceAscending() { // method sorts item from lowest to highest
@@ -194,6 +217,7 @@ public class Main {
 		
 		System.out.print("YOU ADDED: ");//readback
 		newItem.printItemInfo();//call printItemInfo for object newItem
+		budget.checkBudget(calculateTotalPlusTax());
 		
 		scnr.nextLine();//clear the scanner
 		return;
@@ -281,33 +305,43 @@ public class Main {
 		else {//else branch in case there are no items on the list
 			System.out.println("No items on list");//println
 		}
-		System.out.print("Total: $");//total
-		System.out.printf("%.2f\n", calculateTotal());//printf calls the calculate total method, and formats it
 		System.out.print("Total + tax: $");//total plus tax
 		System.out.printf("%.2f\n", calculateTotalPlusTax());//printf calls the calculate total plus tax method, and formats it
+		remainingBudget();
 		return;
 	}
-	public static void openList(Scanner fileScan) {
-		while (fileScan.hasNextLine()){
-			Item newItem = new Item();//create the new item
-			newItem.setItemName(fileScan.nextLine());//call setItemName and read next line
-			newItem.setItemType(fileScan.nextLine());//call setItemType and read next line
-			newItem.setItemPrice(fileScan.nextDouble());//call setItemPrice and read next double
-			newItem.setItemQuantity(fileScan.nextInt());//call setItemQuantity and read next Int
-			itemList.add(newItem);//add object newItem to ArrayList itemList
-			fileScan.nextLine();
+	public static void loadList(File shoppingList) throws IOException {
+		try {
+			Scanner fileScan = new Scanner(shoppingList);//create a new scanner and the input is the file shoppingList
+			budget.setBudget(fileScan.nextDouble());//we are assigning the budget first since it is the first on the list always
+			fileScan.nextLine();//after assignment, next line
+			while (fileScan.hasNextLine()){
+				Item newItem = new Item();//create the new item
+				newItem.setItemName(fileScan.nextLine());//call setItemName and read next line
+				newItem.setItemType(fileScan.nextLine());//call setItemType and read next line
+				newItem.setItemPrice(fileScan.nextDouble());//call setItemPrice and read next double
+				newItem.setItemQuantity(fileScan.nextInt());//call setItemQuantity and read next Int
+				itemList.add(newItem);//add object newItem to ArrayList itemList
+				fileScan.nextLine();//I'm not sure why but it helps to scan the next line.
+			}
+			fileScan.close();
+		}
+		catch(FileNotFoundException e) {//if there is no shoppingList.txt file, catch this exception and create shoppinglist.txt, and return to main with a null argument
+			FileWriter writer = new FileWriter("src/ShoppingList.txt");//create txt file
+			writer.close();//close writer
+			main(null);//return to main
+			//this essentially handles the exception as a relaunch of the whole program, now with the new file.
+		}
+		catch(InputMismatchException e) {//catches exception when budget.setBudget is attempted to be assigned a string
+		}
+		catch(NoSuchElementException e) {//catches exception when trying to read for budget.setBudget and budget is not set
 		}
 	}
-	public static void saveList(File file, Scanner fileScan)throws IOException {//saveList writes a itemList to a file
-		String fileContent="";//create new string called fileContent
-		FileWriter writer = new FileWriter("src/ShoppingList.txt");//file writer named writer writes to the relative path src/shoppinglist.txt
-		fileContent = scanItemList();//fileContent calls scanItemList method
-		writer.write(fileContent);//writer writes the fileContent to the file
-		writer.close();//close the writer
-	}
-	//could probably merge saveList and scanItemList
-	public static String scanItemList() {//scan itemList scans the arrayList and writes it to a file
+	public static void saveList(File shoppingList)throws IOException {//saveList writes a itemList to a file
+		Scanner fileScan = new Scanner(shoppingList);
 		String buildList = "";//initialize a String buildList
+		FileWriter writer = new FileWriter("src/ShoppingList.txt");//file writer named writer writes to the relative path src/shoppinglist.txt
+		buildList = buildList.concat(budget.getBudget() + "\n");
 		for(int i = 0; i < itemList.size(); ++i) {//for loop iterates through the size of itemList
 			Item tempItem = itemList.get(i);//create a new Item object called tempItem from the i index of itemList
 			buildList = buildList.concat(tempItem.getItemName() + "\n");//concat onto buildlist the getItemName getter for tempItem, new Line
@@ -316,44 +350,44 @@ public class Main {
 			buildList = buildList.concat(tempItem.getItemQuantity() + "\n");//concat onto buildlist the getItemQuantity getter for tempItem, new Line
 			buildList = buildList.concat("");//idk
 		}
-		return buildList;//return buildList
+		writer.write(buildList);//writer writes the fileContent to the file
+		writer.close();//close the writer
+		fileScan.close();
 	}
 	public static void main(String[] args) throws IOException {//main executes the main menu for the most part
-		try {//main will try all of it's main functions
-			File file = new File("src/ShoppingList.txt");
-			Scanner fileScan = new Scanner(file);
-			String input;//initialize String variable input
-			openList(fileScan);
-			do{//do while loop starts, branches will allow lowercase and uppercase
-				printMainMenu();//always start by printing the main menu
-				input = scnr.nextLine();//input is the nextLine
-				if(input.equalsIgnoreCase("i")) {//if branch with ignorecase for option m
-					manageItemsMenu(scnr);//call manageItemsMenu and pass the scnr
-				}
-				else if(input.equalsIgnoreCase("b")) {//else if branch with ignorecase for option b
-					setBudget(scnr);//call setBudget and pass the scnr
-				}
-				else if(input.equalsIgnoreCase("d")) {//else if branch with ignorecase for option d
-					printArrayList();//call printArrayList and pass the scnr
-				}
-				else if(input.equalsIgnoreCase("o")) {//else if branch with ignorecase for option o
-					organizationOptionsMenu(scnr);//call organizationOptions and pass the scnr
-				}
-				else if(input.equalsIgnoreCase("q")) {//else if branch with ignorecase for option q
-					saveList(file, fileScan);
-					System.out.println("Quitting");//printline to let user no program is terminating
-				}
-				else {
-					System.out.println("!INVALID INPUT!");//else alert user of invalid input
-				}
-			}while(!input.equalsIgnoreCase("q"));//do this while input is not q
-			scnr.close();//close the scanner
-			fileScan.close();
+		File shoppingList = new File("src/ShoppingList.txt");
+		String input;//initialize String variable input
+		loadList(shoppingList);
+		if(budget.getBudget() > 0.0) {
+			System.out.print("Hello! Current ");
+			remainingBudget();
 		}
-		catch(FileNotFoundException e) {//if there is no shoppingList.txt file, main will catch this exception and create shoppinglist.exe, and return to main with a null argument
-			FileWriter writer = new FileWriter("src/ShoppingList.txt");
-			writer.close();
-			main(null);
-		}
+		do{//do while loop starts, branches will allow lowercase and uppercase
+			if(budget.getBudget() == 0.0) {
+				System.out.println("Attention, budget is not set.");
+			}
+			printMainMenu();//always start by printing the main menu
+			input = scnr.nextLine();//input is the nextLine
+			if(input.equalsIgnoreCase("i")) {//if branch with ignorecase for option m
+				manageItemsMenu(scnr);//call manageItemsMenu and pass the scnr
+			}
+			else if(input.equalsIgnoreCase("b")) {//else if branch with ignorecase for option b
+				setBudget(scnr);//call setBudget and pass the scnr
+			}
+			else if(input.equalsIgnoreCase("d")) {//else if branch with ignorecase for option d
+				printArrayList();//call printArrayList and pass the scnr
+			}
+			else if(input.equalsIgnoreCase("o")) {//else if branch with ignorecase for option o
+				organizationOptionsMenu(scnr);//call organizationOptions and pass the scnr
+			}
+			else if(input.equalsIgnoreCase("q")) {//else if branch with ignorecase for option q
+				saveList(shoppingList);
+				//saveBudget(budget, currentBudget);
+				System.out.println("Quitting");//printline to let user no program is terminating
+			}
+			else {
+				System.out.println("!INVALID INPUT!");//else alert user of invalid input
+			}
+		}while(!input.equalsIgnoreCase("q"));//do this while input is not q
 	}
 }

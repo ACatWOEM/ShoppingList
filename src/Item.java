@@ -1,5 +1,3 @@
-// TODO READ ABOUT import java.math.BigDecimal;
-
 public class Item {
 	private String itemName = "no name";
 	private String itemType = "no type";
