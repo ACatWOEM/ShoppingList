@@ -34,13 +34,13 @@ public class Budget{
 			else if(freq == 'm') {
 				this.payFrequency = 1;
 			}
-			else if(freq == 's') {
+			else if(freq == 'a') {
 				this.payFrequency = 12;
 			}
 			else {
 				System.out.print("Please enter a valid input: ");
 			}
-		}while(freq != 'w' && freq != 'b' && freq != 'm' && freq != 's');
+		}while(freq != 'w' && freq != 'b' && freq != 'm' && freq != 'a');
 		setMonthlyPay();
 	}
 	public void setMonthlyPay() {
